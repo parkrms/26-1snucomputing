@@ -1,29 +1,33 @@
+%%writefile streamlit_app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
 
-# ── 사이드바 설정 ─────────────────────────────
+# ── 여기서부터 자유롭게 수정하세요 ───────────────
+
+st.title("나의 관심 주식 변동폭 대시보드")   # ← 제목을 바꿔보세요
+
+# ── 사이드바 ──────────────────────────────────
 st.sidebar.title("설정")
-st.sidebar.markdown("---")
 
 chart_type = st.sidebar.radio(
     "차트 유형",
-    ["꺾은선 그래프", "막대 그래프", "면적 그래프"]
+    ["꺾은선 그래프", "막대 그래프", "면적 그래프"]   # ← 유형을 바꿔보세요
 )
 
-n_points = st.sidebar.slider("데이터 포인트 수", 10, 100, 50)
-n_cols   = st.sidebar.slider("데이터 열 수", 1, 5, 3)
-
-st.sidebar.markdown("---")
-st.sidebar.info("사이드바에서 설정을 변경하면\n메인 화면이 실시간으로 업데이트됩니다.")
+n = st.sidebar.slider(
+    "조회할 기간(일)",
+    min_value=5,    # ← 최솟값을 바꿔보세요
+    max_value=60,   # ← 최댓값을 바꿔보세요
+    value=14
+)
 
 # ── 메인 화면 ─────────────────────────────────
-st.title("사이드바 대시보드 예제")
-st.write(f"선택된 차트: **{chart_type}** | 데이터: {n_points}행 x {n_cols}열")
+st.write("최근 선택한 기간 동안의 관심 주식 종목 등락폭(가상 데이터)을 시각화하는 대시보드입니다.")   # ← 설명을 바꿔보세요
 
 data = pd.DataFrame(
-    np.random.randn(n_points, n_cols),
-    columns=[f"시리즈{i+1}" for i in range(n_cols)]
+    np.random.randn(n, 3),
+    columns=['삼성전자', '애플', '테슬라']   # ← 컬럼 이름을 바꿔보세요
 )
 
 if chart_type == "꺾은선 그래프":
@@ -34,3 +38,5 @@ else:
     st.area_chart(data)
 
 st.dataframe(data.head(5))
+
+# ── 여기까지 ──────────────────────────────────
